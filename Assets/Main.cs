@@ -48,7 +48,7 @@ public class Main : MonoBehaviour {
 					//testParticleField.Get (i, j, k).transform.position = testParticleField.initialPositions [i, j, k] + particleList.ElectricField (testParticleField.initialPositions [i, j, k]);
 					Vector3 initialPosition = testParticleField.initialPositions [i, j, k];
 					//if (!((initialPosition - sphere1.transform.position).magnitude <= 0.5f || (initialPosition - sphere2.transform.position).magnitude <= 0.5f)) {
-						testParticleField.Get (i, j, k).transform.position = initialPosition + particleList.MagneticField (initialPosition);
+						testParticleField.Get (i, j, k).transform.position = initialPosition + particleList.ElectricField (initialPosition);
 					//} 
 					//else {
 					//	testParticleField.Get (i, j, k).GetComponent<MeshRenderer> ().enabled = false;

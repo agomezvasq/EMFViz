@@ -41,6 +41,23 @@ public class Sphere : MonoBehaviour {
 		return Vector3.Cross (velocity, r.normalized) * charge / r.sqrMagnitude;
 	}
 
+	public float ChargeDensity () {
+		return charge / (4.0f * Mathf.PI * 0.25f);
+	}
+
+	public float b (float a) {
+		return Mathf.Sqrt (1.0f - a * a);
+	}
+
+	public Vector3 SpinningMagneticField (Vector3 position, Vector3 angularVelocity) {
+		Vector3 r = position - transform.position;
+		float radius = r.magnitude;
+		float a = 0.0625f * angularVelocity.magnitude * ChargeDensity () * 2.0f * r.z / (3.0f * Mathf.Pow (radius, 4.0f));
+		float c = r.z / radius;
+		Vector3 vector3 = new Vector3 (Mathf.Sin (b (c)), 0.0f, Mathf.Cos (b (c)));
+		return a * vector3;
+	}
+
 	void OnMouseDrag () {
 		Vector3 screenSpacePosition = Camera.main.WorldToScreenPoint (transform.position);
 		Vector3 newPosition = Camera.main.ScreenToWorldPoint (new Vector3 (Input.mousePosition.x, Input.mousePosition.y, screenSpacePosition.z));

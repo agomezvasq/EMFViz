@@ -33,4 +33,13 @@ public class ParticleList {
 		}
 		return magneticField;
 	}
+
+	public Vector3 SpinningMagneticField (Vector3 position) {
+		Vector3 angularVelocity = new Vector3 (0.0f, 5.0f, 0.0f);
+		Vector3 spinningMagneticField = Vector3.zero;
+		foreach (Sphere sphere in particles) {
+			spinningMagneticField += sphere.SpinningMagneticField (position, angularVelocity);
+		}
+		return spinningMagneticField;
+	}
 }
