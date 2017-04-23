@@ -40,16 +40,16 @@ public class ChargedRing : ChargedObject {
         }
     }
 
-    protected Vector3 _rotation;
-    public Vector3 Rotation
+    protected Vector3 _normal;
+    public Vector3 Normal
     {
         get
         {
-            return _rotation;
+            return _normal;
         }
         set
         {
-            _rotation = value;
+            _normal = value;
         }
     }
 
@@ -118,14 +118,14 @@ public class ChargedRing : ChargedObject {
         }
     }
 
-    public ChargedRing(double charge, Vector3 position, Vector3 rotation, double radius, double internalRadius, double angularSpeed) : this(charge, position, Vector3.zero, rotation, radius, internalRadius, angularSpeed) {}
+    public ChargedRing(double charge, Vector3 position, Vector3 normal, double radius, double internalRadius, double angularSpeed) : this(charge, position, Vector3.zero, normal, radius, internalRadius, angularSpeed) {}
 
-    public ChargedRing(double charge, Vector3 position, Vector3 velocity, Vector3 rotation, double radius, double internalRadius, double angularSpeed) : base(charge, position, velocity)
+    public ChargedRing(double charge, Vector3 position, Vector3 velocity, Vector3 normal, double radius, double internalRadius, double angularSpeed) : base(charge, position, velocity)
     {
         Radius = radius;
         InternalRadius = internalRadius;
         AngularSpeed = angularSpeed;
-        Rotation = rotation;
+        Normal = normal;
     }
 
     public override Vector3 ElectricField(Vector3 position)
@@ -139,8 +139,8 @@ public class ChargedRing : ChargedObject {
             return Vector3.zero;
         }
         Vector3 relativePosition = position - Position;
-        float relation = Vector3.Dot(Rotation, relativePosition);
-        Vector3 relativeNormal = Rotation * relation;
+        float relation = Vector3.Dot(Normal, relativePosition);
+        Vector3 relativeNormal = Normal * relation;
         Vector3 relativeRadius = relativePosition - relativeNormal;
         double x = relativeNormal.magnitude * Sign(relation);
         double r = relativeRadius.magnitude;
@@ -148,11 +148,11 @@ public class ChargedRing : ChargedObject {
         {
             if (x == 0 && r == 0)
             {
-                return (float)CenterMagneticField * Rotation;
+                return (float)CenterMagneticField * Normal;
             }
             if (r == 0)
             {
-                return (float)AxisB(Current, Radius, x) * Rotation;
+                return (float)AxisB(Current, Radius, x) * Normal;
             }
         }
         double alpha = r / Radius;
@@ -168,7 +168,7 @@ public class ChargedRing : ChargedObject {
         double eii = EMField.EllipticIntegralII(b);
         float bnc = (float)(CenterMagneticField / d * (eii * (1D - alphaSquared - betaSquared) / c + ei));
         float brc = (float)(CenterMagneticField * gamma / d * (eii * (1D + alphaSquared + betaSquared) / c - ei));
-        Vector3 bn = bnc * Rotation;
+        Vector3 bn = bnc * Normal;
         Vector3 br = brc * relativeRadius.normalized;
         return bn + br;
     }

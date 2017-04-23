@@ -5,6 +5,7 @@ using UnityEngine;
 public class Ring : FieldGenerator {
     
     public double angularSpeed;
+    public Vector3 normal;
 
 	// Use this for initialization
 	protected override void Start () {
@@ -16,12 +17,13 @@ public class Ring : FieldGenerator {
         float radius = torus.segmentRadius;
         float internalRadius = torus.segmentRadius - torus.tubeRadius * 2f;
 
-        ChargedObject = new ChargedRing(charge, transform.position, transform.rotation * Vector3.up, radius, internalRadius, angularSpeed);
+        ChargedObject = new ChargedRing(charge, transform.parent.position, transform.parent.rotation * Vector3.up, radius, internalRadius, angularSpeed);
+        print(((ChargedRing)ChargedObject).Normal);
     }
 	
 	// Update is called once per frame
 	protected override void Update () {
-        transform.position += ChargedObject.Velocity * Time.deltaTime;
+        transform.parent.position += ChargedObject.Velocity * Time.deltaTime;
 
         if (charge != ChargedObject.Charge)
         {
@@ -29,6 +31,7 @@ public class Ring : FieldGenerator {
             charge = ChargedObject.Charge;
         }
 
-        transform.rotation = Quaternion.Euler((transform.rotation.eulerAngles.y + (float)(((ChargedRing)ChargedObject).AngularSpeed * Time.deltaTime)) * Vector3.up);
+        float angle = (float)((ChargedRing)ChargedObject).AngularSpeed * Time.deltaTime;
+        transform.parent.Rotate(((ChargedRing)ChargedObject).Normal, angle);
     }
 }
