@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class Main : MonoBehaviour {
     
-	public Sphere sphere1;
-	public Sphere sphere2;
+	public Ring ring1;
+	public Ring ring2;
 
 	public FieldSuperpositioner fieldSuperpositioner;
 	public TestParticleGrid testParticleGrid;
@@ -13,8 +13,8 @@ public class Main : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         fieldSuperpositioner = new FieldSuperpositioner();
-        fieldSuperpositioner.Add(sphere1);
-        fieldSuperpositioner.Add(sphere2);
+        fieldSuperpositioner.Add(ring1);
+        fieldSuperpositioner.Add(ring2);
 	}
 
 	// Update is called once per frame

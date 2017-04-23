@@ -5,7 +5,6 @@ using UnityEngine;
 public class TestParticleGrid : MonoBehaviour {
     
     public double resolution;
-    public Vector3 scale;
 
     public TestParticle gameObj;
 
@@ -15,6 +14,7 @@ public class TestParticleGrid : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+        Vector3 scale = (float)resolution * Vector3.one;
 		Vector2 ssSize = Camera.main.WorldToScreenPoint (scale - Camera.main.ScreenToWorldPoint (new Vector3 (Screen.width, Screen.height, 0)));
  
         int rows = (int)(Screen.height / ssSize.y) + 1;
@@ -32,10 +32,12 @@ public class TestParticleGrid : MonoBehaviour {
 		for (int i = 0; i < objGrid.Rows(); i += interval) {
 			for (int j = 0; j < objGrid.Columns(); j += interval) {
 				for (int k = 0; k < objGrid.Aisles(); k += interval) {
+                    Vector3 ssP = new Vector3(ssSize.x, ssSize.y, 0f);
+                    Vector3 p = Camera.main.ScreenToWorldPoint(ssP);
                     Vector3 ssPosition = new Vector3(ssSize.x * (j + 0.5f), ssSize.y * (i + 0.5f), 0f);
                     Vector3 position = Camera.main.ScreenToWorldPoint(ssPosition);
 
-					position = new Vector3 (position.x, position.y, ssSize.x * (k + 0.5f) - 10f - 9.5f / 2f);
+					position = new Vector3 (position.x, position.y, (k / interval + 0.5f) - 10.5f - 9.5f / 2f);
 					objGrid.SetInitialPosition(position, i, j, k);
 
                     TestParticle instantiatedGameObject = Instantiate (gameObj, position, transform.rotation) as TestParticle;

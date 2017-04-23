@@ -10,6 +10,7 @@ public class Sphere : FieldGenerator {
         base.Start();
         
         ChargedObject = new ChargedSphere(charge, transform.position, transform.localScale.x / 2D);
+        print("hello");
     }
 
     // Update is called once per frame

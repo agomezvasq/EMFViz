@@ -14,7 +14,7 @@ public abstract class FieldGenerator : MonoBehaviour {
     protected virtual void Start()
     {
         lastPos = gameObject.transform.position;
-
+        
         GetComponent<MeshRenderer>().material.color = GetColorFromCharge(charge);
     }
 
@@ -43,7 +43,7 @@ public abstract class FieldGenerator : MonoBehaviour {
         }
     }
 
-    private static Color GetColorFromCharge(double charge)
+    protected static Color GetColorFromCharge(double charge)
     {
         int compare = charge.CompareTo(0D);
         switch (compare)
