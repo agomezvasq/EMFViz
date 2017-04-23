@@ -4,26 +4,16 @@ using UnityEngine;
 
 public class ChargedSphere : ChargedObject {
 
-	public static double E (double charge, double radius) {
+	private static double E (double charge, double radius) {
 		return EMField.K * charge / (radius * radius);
 	}
 
-	public static double B (double charge, double speed, double radius) {
+    private static double B (double charge, double speed, double radius) {
 		return EMField.H * charge * speed / (radius * radius);
 	}
 
 	private double _radius;
-	public double Radius
-    {
-        get
-        {
-            return _radius;
-        }
-        set
-        {
-            _radius = value;
-        }
-    }
+	public double Radius { get { return _radius; } set {  _radius = value; } }
 
 	public ChargedSphere (double charge, Vector3 position, double radius) : this(charge, position, Vector3.zero, radius) {}
 

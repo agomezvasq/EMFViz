@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class TestParticle : MonoBehaviour {
 
-	public Vector3 velocity;
-	public Vector3 acceleration;
+    public Vector3 velocity;
+    public Vector3 acceleration;
 
 	// Use this for initialization
 	void Start () {

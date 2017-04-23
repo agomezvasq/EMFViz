@@ -10,7 +10,7 @@ public class ChargedRing : ChargedObject {
         return charge * Frequency(angularSpeed);
     }
 
-    public static double Frequency(double angularSpeed)
+    private static double Frequency(double angularSpeed)
     {
         return angularSpeed / (2D * Mathf.PI);
     }

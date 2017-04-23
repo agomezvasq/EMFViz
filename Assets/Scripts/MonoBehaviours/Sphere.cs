@@ -1,16 +1,20 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Sphere : MonoBehaviour {
+public class Sphere : MonoBehaviour, IFieldGenerator {
 
 	public float charge;
 	public Vector3 velocity;
 
 	private Vector3 lastPos;
 
-	// Use this for initialization
-	void Start () {
+    private ChargedObject _chargedObject;
+    public ChargedObject ChargedObject { get { return _chargedObject; } set { _chargedObject = value; } }
+
+    // Use this for initialization
+    void Start () {
 		lastPos = gameObject.transform.position;
 
 		Color color = Color.black;
@@ -24,6 +28,8 @@ public class Sphere : MonoBehaviour {
 			color = Color.cyan;
 		}
 		GetComponent<MeshRenderer> ().material.color = color;
+
+        ChargedObject = new ChargedSphere(charge, transform.position, transform.localScale.x / 2D);
 	}
 	
 	// Update is called once per frame

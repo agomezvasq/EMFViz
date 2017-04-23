@@ -5,41 +5,13 @@ using UnityEngine;
 public abstract class ChargedObject {
 
     protected double _charge;
-	public virtual double Charge {
-        get
-        {
-            return _charge;
-        }
-        set
-        {
-            _charge = value;
-        }
-    }
+	public virtual double Charge { get { return _charge; } set { _charge = value; } }
 
     protected Vector3 _position;
-	public virtual Vector3 Position
-    {
-        get
-        {
-            return _position;
-        }
-        set {
-            _position = value;
-        }
-    }
+	public virtual Vector3 Position { get { return _position; } set { _position = value; } }
 
     protected Vector3 _velocity;
-	public virtual Vector3 Velocity
-    {
-        get
-        {
-            return _velocity;
-        }
-        set
-        {
-            _velocity = value;
-        }
-    }
+	public virtual Vector3 Velocity { get { return _velocity; } set { _velocity = value; } }
 
 	public abstract Vector3 ElectricField (Vector3 position);
 	public abstract Vector3 MagneticField (Vector3 position);
