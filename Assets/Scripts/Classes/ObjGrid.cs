@@ -10,6 +10,7 @@ public class ObjGrid<T> {
     public ObjGrid(int rows, int columns, int aisles)
     {
         ts = new T[rows, columns, aisles];
+        initialPositions = new Vector3[rows, columns, aisles];
     }
 
     public T Get(int row, int column, int aisle)

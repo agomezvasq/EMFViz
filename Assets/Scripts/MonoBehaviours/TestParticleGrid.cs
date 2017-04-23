@@ -65,7 +65,7 @@ public class TestParticleGrid : MonoBehaviour {
                 for (int k = 0; k < objGrid.Aisles(); k += interval) {
                     Vector3 position = objGrid.Get(i, j, k).transform.position;
 
-                    Vector3 initialPosition = objGrid.GetInitialPosition(i, j, k);
+                    //Vector3 initialPosition = objGrid.GetInitialPosition(i, j, k);
                     Vector3 magneticField = fieldSuperpositioner.MagneticField(position);
 
                     objGrid.Get(i, j, k).velocity = magneticField;
