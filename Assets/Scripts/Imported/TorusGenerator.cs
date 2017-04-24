@@ -17,6 +17,8 @@
  * 
  * Outside the script, the transform.scale of Main can be accessed by: GameObject.Find(name_of_the_Main_Game_Object)
  */
+using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class TorusGenerator : MonoBehaviour {
@@ -97,7 +99,7 @@ public class TorusGenerator : MonoBehaviour {
 
         mesh.RecalculateBounds();
         mesh.RecalculateNormals();
-        ;
+
         MeshFilter mFilter = torusMesh.GetComponent<MeshFilter>();
         mFilter.mesh = mesh;
     }

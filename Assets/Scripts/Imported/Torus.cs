@@ -41,8 +41,10 @@ public class Torus : MonoBehaviour {
 
         // Create floats for our xyz coordinates
         float x, y, z;
+       
+        Vector2[] uvs = new Vector2[totalVertices];
 
-   		// Begin loop that fills in both arrays
+        // Begin loop that fills in both arrays
         for (int i = 0; i < numSegments; i++)
         {
             // Find next (or first) segment offset
@@ -79,14 +81,25 @@ public class Torus : MonoBehaviour {
                 triangleIndices[iv1 * 6 + 3] = iv3;
                 triangleIndices[iv1 * 6 + 4] = iv4;
                 triangleIndices[iv1 * 6 + 5] = iv1;
+                
+                uvs[iv1] = new Vector2((float)i / ((float)numSegments - 0.5f), (float)j / ((float)numTubes - 0.5f));
             }
         }
         mesh.vertices = vertices;
         mesh.triangles = triangleIndices;
 
+        string s = "";
+        foreach (Vector2 uv in uvs)
+        {
+            s += uv.ToString() + "\n";
+        }
+        print(s);
+
+        mesh.uv = uvs;
+
         mesh.RecalculateBounds();
         mesh.RecalculateNormals(); // added on suggestion of Eric5h5 & joaeba in the forum thread
-        ;
+        
         MeshFilter mFilter = GetComponent<MeshFilter>(); // tweaked to Generic
         mFilter.mesh = mesh;
     }

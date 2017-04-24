@@ -32,6 +32,6 @@ public class Ring : FieldGenerator {
         }
 
         float angle = (float)((ChargedRing)ChargedObject).AngularSpeed * Time.deltaTime;
-        transform.parent.Rotate(((ChargedRing)ChargedObject).Normal, angle);
+        transform.parent.Rotate(((ChargedRing)ChargedObject).Normal, angle, Space.World);
     }
 }

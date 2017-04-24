@@ -15,7 +15,7 @@ public class Main : MonoBehaviour {
         fieldSuperpositioner = new FieldSuperpositioner();
         fieldSuperpositioner.Add(ring1);
         fieldSuperpositioner.Add(ring2);
-	}
+    }
 
 	// Update is called once per frame
 	void Update () {
