@@ -26,7 +26,7 @@ public abstract class EMField {
 		0.0004468699D, 0.0004030207D, 0.0003653232D, 0.0003326781D, 0.0003042213D, 0.0002792656D,
 		0.0002572595D, 0.0002377557D, 0.0002203888D
 	};
-
+    
 	public static double EllipticIntegralI (float x) {
 		return EllipticIntegralI (x, EI_TERMS.Length);
 	}

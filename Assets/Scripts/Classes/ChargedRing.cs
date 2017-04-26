@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class ChargedRing : ChargedObject {
 
+    private static EllipticIntegralTable ellipticIntegralTable = new EllipticIntegralTable(Application.dataPath + "\\Files\\E.txt");
+
     private static double I(double charge, double angularSpeed)
     {
         return charge * Frequency(angularSpeed);
@@ -142,7 +144,7 @@ public class ChargedRing : ChargedObject {
         float relation = Vector3.Dot(Normal, relativePosition);
         Vector3 relativeNormal = Normal * relation;
         Vector3 relativeRadius = relativePosition - relativeNormal;
-        double x = relativeNormal.magnitude * Sign(relation);
+        double x = relativeNormal.magnitude * Math.Sign(relation);
         double r = relativeRadius.magnitude;
         if (x == 0 || r == 0)
         {
@@ -159,22 +161,17 @@ public class ChargedRing : ChargedObject {
         double beta = x / Radius;
         double gamma = x / r;
         double A = (1D + alpha) * (1D + alpha) + beta * beta;
-        float b = Mathf.Sqrt(4f * (float)alpha / (float)A);
+        double b = Math.Sqrt(4D * alpha / A);
         double c = A - 4D * alpha;
         double alphaSquared = alpha * alpha;
         double betaSquared = beta * beta;
         float d = Mathf.PI * Mathf.Sqrt((float)A);
-        double ei = EMField.EllipticIntegralI(b);
-        double eii = EMField.EllipticIntegralII(b);
+        double ei = ellipticIntegralTable.GetEI(b);
+        double eii = ellipticIntegralTable.GetEII(b);
         float bnc = (float)(CenterMagneticField / d * (eii * (1D - alphaSquared - betaSquared) / c + ei));
         float brc = (float)(CenterMagneticField * gamma / d * (eii * (1D + alphaSquared + betaSquared) / c - ei));
         Vector3 bn = bnc * Normal;
         Vector3 br = brc * relativeRadius.normalized;
         return bn + br;
-    }
-
-    public static double Sign(float x)
-    {
-        return x / Mathf.Abs(x);
     }
 }

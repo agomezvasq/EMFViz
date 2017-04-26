@@ -45,7 +45,10 @@ public class TestParticleGrid : MonoBehaviour {
 					instantiatedGameObject.transform.SetParent (transform);
                     TestParticle testParticle = instantiatedGameObject.GetComponent<TestParticle>();
                     objGrid.Set(testParticle, i, j, k);
-				}
+
+                    TrailRenderer trailRenderer = testParticle.GetComponent<TrailRenderer>();
+                    objGrid.SetTrailRenderer(trailRenderer, i, j, k);
+                }
 			}
 		}
 	}
@@ -65,12 +68,16 @@ public class TestParticleGrid : MonoBehaviour {
         for (int i = 0; i < objGrid.Rows(); i += interval) {
             for (int j = 0; j < objGrid.Columns(); j += interval) {
                 for (int k = 0; k < objGrid.Aisles(); k += interval) {
-                    Vector3 position = objGrid.Get(i, j, k).transform.position;
+                    TestParticle obj = objGrid.Get(i, j, k);
+
+                    Vector3 position = obj.transform.position;
+                    Vector3 initialPosition = objGrid.GetInitialPosition(i, j, k);
 
                     //Vector3 initialPosition = objGrid.GetInitialPosition(i, j, k);
                     Vector3 magneticField = fieldSuperpositioner.MagneticField(position);
 
-                    objGrid.Get(i, j, k).velocity = magneticField;
+                    obj.velocity = magneticField;
+                    objGrid.GetTrailRenderer(i, j, k).time = 5 * (position - initialPosition).magnitude;
                 }
             }
         }

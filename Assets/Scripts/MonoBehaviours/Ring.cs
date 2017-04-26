@@ -27,8 +27,12 @@ public class Ring : FieldGenerator {
 
         if (charge != ChargedObject.Charge)
         {
-            transform.parent.GetComponent<MeshRenderer>().material.color = GetColorFromCharge(ChargedObject.Charge);
-            charge = ChargedObject.Charge;
+            transform.parent.GetComponent<MeshRenderer>().material.color = GetColorFromCharge(charge);
+            ChargedObject.Charge = charge;
+        }
+        if (angularSpeed != ((ChargedRing)ChargedObject).AngularSpeed)
+        {
+            ((ChargedRing)ChargedObject).AngularSpeed = angularSpeed;
         }
 
         float angle = (float)((ChargedRing)ChargedObject).AngularSpeed * Time.deltaTime;

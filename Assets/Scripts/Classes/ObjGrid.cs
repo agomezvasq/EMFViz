@@ -6,11 +6,13 @@ public class ObjGrid<T> {
 
     private T[,,] ts;
     private Vector3[,,] initialPositions;
+    private TrailRenderer[,,] trailRenderers;
 
     public ObjGrid(int rows, int columns, int aisles)
     {
         ts = new T[rows, columns, aisles];
         initialPositions = new Vector3[rows, columns, aisles];
+        trailRenderers = new TrailRenderer[rows, columns, aisles];
     }
 
     public T Get(int row, int column, int aisle)
@@ -46,5 +48,15 @@ public class ObjGrid<T> {
     public void SetInitialPosition(Vector3 initialPosition, int row, int column, int aisle)
     {
         initialPositions[row, column, aisle] = initialPosition;
+    }
+
+    public TrailRenderer GetTrailRenderer(int row, int column, int aisle)
+    {
+        return trailRenderers[row, column, aisle];
+    }
+
+    public void SetTrailRenderer(TrailRenderer trailRenderer, int row, int column, int aisle)
+    {
+        trailRenderers[row, column, aisle] = trailRenderer;
     }
 }
