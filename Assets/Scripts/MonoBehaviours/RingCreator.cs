@@ -1,24 +1,11 @@
-/**
- * Based on a script by Steffen (http://forum.unity3d.com/threads/torus-in-unity.8487/) (in $primitives_966_104.zip, originally named "Primitives.cs")
- *
- * Editted by Michael Zoller on December 6, 2015.
- * It was shortened by about 30 lines (and possibly sped up by a factor of 2) by consolidating math & loops and removing intermediate Collections.
- */
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(MeshFilter),typeof(MeshRenderer))]
-public class Torus : MonoBehaviour {
+public abstract class RingCreator {
 
-	public float segmentRadius = 1f;
-	public float tubeRadius = 0.1f;
-	public int numSegments = 32;
-	public int numTubes = 12;
-
-	void Start() {
-		RefreshTorus();
-	}
-
-    public void RefreshTorus() {
+    public static Mesh CreateRing(float segmentRadius, float tubeRadius, int numSegments, int numTubes)
+    {
         // Total vertices
         int totalVertices = numSegments * numTubes;
 
@@ -41,7 +28,7 @@ public class Torus : MonoBehaviour {
 
         // Create floats for our xyz coordinates
         float x, y, z;
-       
+
         Vector2[] uvs = new Vector2[totalVertices];
 
         // Begin loop that fills in both arrays
@@ -81,26 +68,18 @@ public class Torus : MonoBehaviour {
                 triangleIndices[iv1 * 6 + 3] = iv3;
                 triangleIndices[iv1 * 6 + 4] = iv4;
                 triangleIndices[iv1 * 6 + 5] = iv1;
-                
+
                 uvs[iv1] = new Vector2((float)i / ((float)numSegments - 0.5f), (float)j / ((float)numTubes - 0.5f));
             }
         }
         mesh.vertices = vertices;
         mesh.triangles = triangleIndices;
 
-        string s = "";
-        foreach (Vector2 uv in uvs)
-        {
-            s += uv.ToString() + "\n";
-        }
-        print(s);
-
         mesh.uv = uvs;
 
         mesh.RecalculateBounds();
         mesh.RecalculateNormals(); // added on suggestion of Eric5h5 & joaeba in the forum thread
-        
-        MeshFilter mFilter = GetComponent<MeshFilter>(); // tweaked to Generic
-        mFilter.mesh = mesh;
+
+        return mesh;
     }
 }

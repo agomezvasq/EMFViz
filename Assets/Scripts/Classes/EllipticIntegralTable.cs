@@ -36,28 +36,11 @@ public class EllipticIntegralTable {
         }
 
         streamReader.Close();
-
-        /*StreamWriter streamWriter = new StreamWriter(Application.dataPath + "\\Files\\E2.txt");
-
-        for (int i = 0; i < 100001; i++)
-        {
-            float x = (float)i / 100000f;
-
-            string line = EMField.EllipticIntegralI(x) + "\t" + EMField.EllipticIntegralII(x);
-
-            streamWriter.WriteLine(line);
-        }
-
-        streamWriter.Close();*/
     }
 
     public double GetEI(double x)
     {
         x = Math.Round(x, 5);
-        if (x >= 0.999)
-        {
-            MonoBehaviour.print("Hello");
-        }
         Tuple tuple = _values[x];
         return tuple.First;
     }
@@ -65,10 +48,6 @@ public class EllipticIntegralTable {
     public double GetEII(double x)
     {
         x = Math.Round(x, 5);
-        if (x >= 0.999)
-        {
-            MonoBehaviour.print("Hello");
-        }
         Tuple tuple = _values[x];
         return tuple.Second;
     }

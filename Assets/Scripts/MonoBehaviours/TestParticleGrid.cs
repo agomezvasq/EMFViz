@@ -3,17 +3,38 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class TestParticleGrid : MonoBehaviour {
-    
+
     public double resolution;
-
+    public Field field;
     public TestParticle gameObj;
+    public Vector3 initialPosition;
+    public Vector3 initialVelocity;
 
-    public ObjGrid<TestParticle> objGrid;
-
+    private FieldSuperpositioner fieldSuperpositioner;
+    private ObjGrid<TestParticle> objGrid;
     private int interval;
 
 	// Use this for initialization
 	void Start () {
+        switch (field) {
+            case Field.Electric:
+                fieldSuperpositioner = new ElectricFieldSuperpositioner();
+                break;
+            case Field.Magnetic:
+                fieldSuperpositioner = new MagneticFieldSuperpositioner();
+                break;
+            default:
+                fieldSuperpositioner = null;
+                break;
+        }
+
+        FieldGenerator[] fieldGenerators = FindObjectsOfType<FieldGenerator>();
+
+        foreach (FieldGenerator fieldGenerator in fieldGenerators)
+        {
+            fieldSuperpositioner.Add(fieldGenerator);
+        }
+
         Vector3 scale = (float)resolution * Vector3.one;
 		Vector2 ssSize = Camera.main.WorldToScreenPoint (scale - Camera.main.ScreenToWorldPoint (new Vector3 (Screen.width, Screen.height, 0)));
  
@@ -24,30 +45,20 @@ public class TestParticleGrid : MonoBehaviour {
 
         interval = Mathf.RoundToInt((float)(1D / resolution));
 
-        if (interval == 0)
-        {
-            return;
-        }
-
 		for (int i = 0; i < objGrid.Rows(); i += interval) {
 			for (int j = 0; j < objGrid.Columns(); j += interval) {
 				for (int k = 0; k < objGrid.Aisles(); k += interval) {
-                    Vector3 ssP = new Vector3(ssSize.x, ssSize.y, 0f);
-                    Vector3 p = Camera.main.ScreenToWorldPoint(ssP);
                     Vector3 ssPosition = new Vector3(ssSize.x * (j + 0.5f), ssSize.y * (i + 0.5f), 0f);
                     Vector3 position = Camera.main.ScreenToWorldPoint(ssPosition);
-
-					position = new Vector3 (position.x, position.y, (k / interval + 0.5f) - 10.5f - 9.5f / 2f);
-					objGrid.SetInitialPosition(position, i, j, k);
+                    
+					position = initialPosition + (new Vector3 (position.x, position.y, (k / interval + 0.5f) - 10.5f - 9.5f / 2f));
 
                     TestParticle instantiatedGameObject = Instantiate (gameObj, position, transform.rotation) as TestParticle;
 					instantiatedGameObject.transform.localScale = scale;
 					instantiatedGameObject.transform.SetParent (transform);
                     TestParticle testParticle = instantiatedGameObject.GetComponent<TestParticle>();
+                    testParticle.velocity = initialVelocity;
                     objGrid.Set(testParticle, i, j, k);
-
-                    TrailRenderer trailRenderer = testParticle.GetComponent<TrailRenderer>();
-                    objGrid.SetTrailRenderer(trailRenderer, i, j, k);
                 }
 			}
 		}
@@ -55,31 +66,30 @@ public class TestParticleGrid : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
+        UpdateField();
 	}
 
-    public void UpdateFields(FieldSuperpositioner fieldSuperpositioner)
-    {
-        if (interval == 0)
-        {
-            return;
-        }
-
+    public void UpdateField() {
         for (int i = 0; i < objGrid.Rows(); i += interval) {
             for (int j = 0; j < objGrid.Columns(); j += interval) {
                 for (int k = 0; k < objGrid.Aisles(); k += interval) {
                     TestParticle obj = objGrid.Get(i, j, k);
 
                     Vector3 position = obj.transform.position;
-                    Vector3 initialPosition = objGrid.GetInitialPosition(i, j, k);
+                    Vector3 initialPosition = obj.GetInitialPosition();
+                    
+                    Vector3 field = fieldSuperpositioner.Field(position);
 
-                    //Vector3 initialPosition = objGrid.GetInitialPosition(i, j, k);
-                    Vector3 magneticField = fieldSuperpositioner.MagneticField(position);
-
-                    obj.velocity = magneticField;
-                    objGrid.GetTrailRenderer(i, j, k).time = 5 * (position - initialPosition).magnitude;
+                    obj.velocity = field;
+                    obj.GetTrailRenderer().time = 5 * (position - initialPosition).magnitude;
                 }
             }
         }
     }
+}
+
+public enum Field
+{
+    Electric,
+    Magnetic
 }

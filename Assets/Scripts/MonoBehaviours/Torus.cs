@@ -1,14 +1,25 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+/**
+ * Based on a script by Steffen (http://forum.unity3d.com/threads/torus-in-unity.8487/) (in $primitives_966_104.zip, originally named "Primitives.cs")
+ *
+ * Editted by Michael Zoller on December 6, 2015.
+ * It was shortened by about 30 lines (and possibly sped up by a factor of 2) by consolidating math & loops and removing intermediate Collections.
+ */
 using UnityEngine;
 
-public class Ring : FieldGenerator {
-    
+[RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
+public class Torus : FieldGenerator {
+
+	public float segmentRadius = 1f;
+	public float tubeRadius = 0.1f;
+	public int numSegments = 32;
+	public int numTubes = 12;
+
     public double angularSpeed;
     public Vector3 normal;
 
-	// Use this for initialization
-	protected override void Start () {
+    protected override void Start() {
+        GetComponent<MeshFilter>().mesh = RingCreator.CreateRing(segmentRadius, tubeRadius, numSegments, numTubes);
+
         lastPos = transform.parent.position;
 
         transform.parent.GetComponent<MeshRenderer>().material.color = GetColorFromCharge(charge);
@@ -18,11 +29,11 @@ public class Ring : FieldGenerator {
         float internalRadius = torus.segmentRadius - torus.tubeRadius * 2f;
 
         ChargedObject = new ChargedRing(charge, transform.parent.position, transform.parent.rotation * Vector3.up, radius, internalRadius, angularSpeed);
-        print(((ChargedRing)ChargedObject).Normal);
     }
-	
-	// Update is called once per frame
-	protected override void Update () {
+
+    // Update is called once per frame
+    protected override void Update()
+    {
         transform.parent.position += ChargedObject.Velocity * Time.deltaTime;
 
         if (charge != ChargedObject.Charge)
